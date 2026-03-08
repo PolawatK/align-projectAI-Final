@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: align-backend
+    env: node
+    region: singapore
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SUPABASE_URL
+        sync: false        # Set in Render dashboard
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false        # Set in Render dashboard
+      - key: GEMINI_API_KEY
+        sync: false        # Set in Render dashboard
+      - key: FRONTEND_URL
+        sync: false        # Set in Render dashboard
+      - key: PORT
+        value: 4000
