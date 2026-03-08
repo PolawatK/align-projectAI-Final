@@ -8,7 +8,12 @@ const router = Router();
 let genAI = null;
 function getGenAI() {
   if (!process.env.GEMINI_API_KEY) throw new Error('GEMINI_API_KEY not configured');
-  if (!genAI) genAI = new GoogleGenAI(process.env.GEMINI_API_KEY);
+  if (!genAI) {
+    // แก้ไข: ใช้ object ในการสร้าง instance สำหรับ @google/genai
+    genAI = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY
+    });
+  }
   return genAI;
 }
 
@@ -65,15 +70,19 @@ IMPORTANT: Respond ONLY with valid JSON, no markdown, no code blocks, no extra t
 
   try {
     const ai = getGenAI();
+    
+    // แก้ไข: ปรับโครงสร้างการเรียกใช้และชื่อโมเดลให้ถูกต้อง
     const result = await ai.models.generateContent({
-      model: 'gemini-1.5-flash-001',
-      contents: prompt,
+      model: 'gemini-1.5-flash', // แก้จาก gemini-1.5-flash-001
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {
         temperature: 0.4,
-        maxOutputTokens: 400
+        maxOutputTokens: 800,
+        response_mime_type: 'application/json' // บังคับ format JSON จากฝั่ง AI
       }
     });
-    const text = result.response.text().replace(/```json|```/g, '').trim();
+
+    const text = result.response.text().trim();
     const parsed = JSON.parse(text);
 
     res.json({
