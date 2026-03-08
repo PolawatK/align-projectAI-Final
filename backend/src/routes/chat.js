@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from "@google/genai";
 import { requireAuth } from '../middleware/auth.js';
 import { retrieveContext } from '../data/knowledge.js';
 
@@ -8,7 +8,11 @@ const router = Router();
 let genAI = null;
 function getGenAI() {
   if (!process.env.GEMINI_API_KEY) throw new Error('GEMINI_API_KEY not configured');
-  if (!genAI) genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  if (!genAI) {
+    genAI = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY
+    });
+  }
   return genAI;
 }
 
@@ -76,17 +80,18 @@ router.post('/', requireAuth, async (req, res) => {
   ];
 
   try {
-    const model = getGenAI().getGenerativeModel({
-      model: 'gemini-1.5-flash-latest',
-      generationConfig: {
+    const ai = getGenAI();
+    const result = await ai.models.generateContent({
+      model: "gemini-1.5-flash",
+      contents: contents,
+      config: {
         temperature: 0.5,
         maxOutputTokens: 600,
         topP: 0.9,
       }
     });
 
-    const result = await model.generateContent({ contents });
-    const reply = result.response.text().trim();
+    const reply = result.text.trim();
 
     // Return sources used (for transparency)
     const sources = relevant.map(e => ({ title: e.title, category: e.category }));
