@@ -30,14 +30,18 @@ router.post("/", requireAuth, async (req, res) => {
     ? relevant.map(e => `${e.title}\n${e.content}`).join("\n\n")
     : "";
 
-  const messages = [
-    { role: "system", content: SYSTEM_PROMPT + contextBlock },
-    ...history.map(m => ({
-      role: m.role,
-      content: m.content
+const messages = [
+  { role: "system", content: SYSTEM_PROMPT + contextBlock },
+
+  ...history
+    .filter(m => m && typeof m.content === "string")
+    .map(m => ({
+      role: m.role === "assistant" ? "assistant" : "user",
+      content: m.content.trim()
     })),
-    { role: "user", content: message }
-  ];
+
+  { role: "user", content: message }
+];
 
   try {
 
