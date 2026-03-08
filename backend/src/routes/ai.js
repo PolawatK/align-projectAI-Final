@@ -9,7 +9,7 @@ let genAI = null;
 function getGenAI() {
   if (!process.env.GEMINI_API_KEY) throw new Error('GEMINI_API_KEY not configured');
   if (!genAI) {
-    // แก้ไข: ใช้ object ในการสร้าง instance สำหรับ @google/genai
+    // กำหนดการสร้าง instance ให้รองรับ API Key อย่างถูกต้อง
     genAI = new GoogleGenAI({
       apiKey: process.env.GEMINI_API_KEY
     });
@@ -19,37 +19,30 @@ function getGenAI() {
 
 /**
  * POST /api/ai/recommend
- * Header: Authorization: Bearer <token>
  * Body: { score, spine_deg, neck_deg, good_pct, duration_sec, total_frames }
- * Returns: 3 AI posture recommendations
  */
 router.post('/recommend', requireAuth, async (req, res) => {
   const { score, spine_deg, neck_deg, good_pct, duration_sec, total_frames } = req.body;
 
-  // Guardrail: validate input
   if (score === undefined) {
     return res.status(400).json({ error: 'score is required' });
   }
 
-  // Guardrail: low confidence (not enough frames)
   const isLowConfidence = (total_frames || 0) < 60;
 
   const prompt = `You are a professional posture correction coach. Based on these posture metrics from a real-time camera scan, provide exactly 3 specific recommendations.
 
 USER METRICS:
-- Posture Score: ${score}% (Good frame ratio)
-- Spine Tilt: ${spine_deg || 0}° (Good is <8°, Concerning is >15°)
-- Neck/Head Forward: ${neck_deg || 0}° (Good is <22°, Concerning is >30°)
+- Posture Score: ${score}%
+- Spine Tilt: ${spine_deg || 0}°
+- Neck/Head Forward: ${neck_deg || 0}°
 - Good Posture Time: ${good_pct || score}%
 - Session Duration: ${duration_sec || 0} seconds
 
 RULES:
-1. If score >= 75: Focus on maintenance and strengthening exercises
-2. If score 50-74: Provide specific corrective exercises targeting the weak areas
-3. If score < 50: Urgent corrections needed, recommend professional consultation
-4. Always include one breathing/mindfulness technique
-
-IMPORTANT: Respond ONLY with valid JSON, no markdown, no code blocks, no extra text.
+1. Respond ONLY with valid JSON.
+2. If score < 50, recommend professional consultation.
+3. Include one breathing technique.
 
 {
   "severity": "good" | "moderate" | "severe",
@@ -58,32 +51,30 @@ IMPORTANT: Respond ONLY with valid JSON, no markdown, no code blocks, no extra t
     {
       "title": "short title (Thai)",
       "type": "rule-based" | "ai-generated",
-      "reason": "specific reason based on the exact metrics above (Thai, 2-3 sentences)",
-      "steps": ["step 1", "step 2", "step 3"],
-      "tag": "Spine" | "Neck" | "Breathing" | "Exercise" | "Ergonomics" | "Lifestyle",
-      "frequency": "e.g. ทุก 30 นาที หรือ วันละ 3 เซ็ต"
-    },
-    { "same structure for rec 2" },
-    { "same structure for rec 3" }
+      "reason": "specific reason (Thai)",
+      "steps": ["step 1", "step 2"],
+      "tag": "Spine" | "Neck" | "Breathing",
+      "frequency": "frequency description"
+    }
   ]
 }`;
 
   try {
     const ai = getGenAI();
     
-    // แก้ไข: ปรับโครงสร้างการเรียกใช้และชื่อโมเดลให้ถูกต้อง
+    // เปลี่ยนเป็น gemini-1.5-flash-latest ซึ่งมักจะแก้ปัญหา 404 ในเวอร์ชัน v1beta ได้
     const result = await ai.models.generateContent({
-      model: 'gemini-1.5-flash', // แก้จาก gemini-1.5-flash-001
+      model: 'gemini-2.0-flash', 
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {
         temperature: 0.4,
-        maxOutputTokens: 800,
-        response_mime_type: 'application/json' // บังคับ format JSON จากฝั่ง AI
+        maxOutputTokens: 1000,
+        response_mime_type: 'application/json'
       }
     });
 
-    const text = result.response.text().trim();
-    const parsed = JSON.parse(text);
+    const responseText = result.response.text();
+    const parsed = JSON.parse(responseText);
 
     res.json({
       ...parsed,
@@ -92,7 +83,7 @@ IMPORTANT: Respond ONLY with valid JSON, no markdown, no code blocks, no extra t
     });
   } catch (err) {
     console.error('Gemini error:', err);
-    // Fallback rule-based recommendations
+    // กรณี AI ขัดข้อง ให้ใช้ระบบกฎพื้นฐานแทน (Fallback)
     res.json(getFallbackRecs(score, spine_deg, neck_deg, isLowConfidence));
   }
 });
@@ -109,7 +100,7 @@ function getFallbackRecs(score = 50, spineDeg = 0, neckDeg = 0, lowConfidence = 
       {
         title: 'Chin Tuck — ดึงคางกลับ',
         type: 'rule-based',
-        reason: `มุม Neck ${neckDeg}° บ่งชี้ว่าศีรษะยื่นไปข้างหน้า การทำ Chin Tuck ช่วยลดแรงกดบนกระดูกคอและเสริมกล้ามเนื้อลึก ซึ่งรองรับน้ำหนักศีรษะได้ดีขึ้น`,
+        reason: `มุม Neck ${neckDeg}° บ่งชี้ว่าศีรษะยื่นไปข้างหน้า การทำ Chin Tuck ช่วยลดแรงกดบนกระดูกคอ`,
         steps: ['นั่งตัวตรง', 'ดึงคางตรงกลับ ไม่ก้มหัว', 'ค้างไว้ 5 วินาที', 'ทำซ้ำ 10 ครั้ง'],
         tag: 'Neck',
         frequency: 'ทุก 30 นาที'
@@ -117,18 +108,18 @@ function getFallbackRecs(score = 50, spineDeg = 0, neckDeg = 0, lowConfidence = 
       {
         title: 'Shoulder Blade Squeeze',
         type: 'rule-based',
-        reason: `Spine Tilt ${spineDeg}° แสดงถึงการเอนของลำตัว การบีบสะบักช่วยเปิดหน้าอก ดึงไหล่กลับ และตั้งกระดูกสันหลังให้ตรง`,
-        steps: ['นั่งหรือยืนตัวตรง', 'บีบสะบักทั้งสองเข้าหากัน', 'ค้างไว้ 5–8 วินาที', 'คลาย ทำ 15 ครั้ง'],
+        reason: `Spine Tilt ${spineDeg}° แสดงถึงการเอนของลำตัว การบีบสะบักช่วยตั้งกระดูกสันหลังให้ตรง`,
+        steps: ['นั่งหรือยืนตัวตรง', 'บีบสะบักเข้าหากัน', 'ค้างไว้ 5-8 วินาที', 'คลาย ทำ 15 ครั้ง'],
         tag: 'Spine',
         frequency: 'วันละ 3 เซ็ต'
       },
       {
         title: 'Box Breathing — หายใจสี่เหลี่ยม',
         type: 'ai-generated',
-        reason: 'ความเครียดและลมหายใจตื้นทำให้กล้ามเนื้อลำตัวตึง ส่งผลให้ท่าทางแย่ลง Box Breathing ช่วยผ่อนคลายระบบประสาทและตั้งท่าทางได้เป็นธรรมชาติ',
-        steps: ['หายใจเข้า 4 วินาที', 'กลั้น 4 วินาที', 'หายใจออก 4 วินาที', 'กลั้น 4 วินาที ทำ 4 รอบ'],
+        reason: 'ช่วยผ่อนคลายระบบประสาทและลดการตึงเครียดของกล้ามเนื้อลำตัว',
+        steps: ['หายใจเข้า 4 วิ', 'กลั้น 4 วิ', 'หายใจออก 4 วิ', 'กลั้น 4 วิ'],
         tag: 'Breathing',
-        frequency: 'ทุกชั่วโมง หรือเมื่อรู้สึกเครียด'
+        frequency: 'ทุกชั่วโมง'
       }
     ]
   };
