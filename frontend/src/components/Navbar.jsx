@@ -9,7 +9,7 @@ export default function Navbar() {
     <nav>
       <Link to="/" className="nav-logo">Align</Link>
       <div className="nav-links">
-        <Link to="/" className={`nav-link${pathname === '/' ? ' active' : ''}`}>Scanner</Link>
+        <Link to="/scanner" className={`nav-link${pathname === '/scanner' ? ' active' : ''}`}>Scanner</Link>
         <Link to="/dashboard" className={`nav-link${pathname === '/dashboard' ? ' active' : ''}`}>Dashboard</Link>
         <span style={{ fontSize: '.78rem', color: 'var(--soft)' }}>
           {user?.display_name || user?.email}
