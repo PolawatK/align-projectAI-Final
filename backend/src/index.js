@@ -6,6 +6,7 @@ import rateLimit from 'express-rate-limit';
 import authRouter from './routes/auth.js';
 import sessionRouter from './routes/sessions.js';
 import aiRouter from './routes/ai.js';
+import chatRouter from './routes/chat.js';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -42,6 +43,7 @@ const aiLimiter = rateLimit({
 app.use('/api/auth', authRouter);
 app.use('/api/sessions', sessionRouter);
 app.use('/api/ai', aiLimiter, aiRouter);
+app.use('/api/chat', aiLimiter, chatRouter);
 
 // ─── Health Check ─────────────────────────────────────────────
 app.get('/health', (req, res) => {

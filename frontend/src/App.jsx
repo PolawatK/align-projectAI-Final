@@ -3,6 +3,7 @@ import { useAuth } from './hooks/useAuth.jsx';
 import Navbar from './components/Navbar.jsx';
 import UserBar from './components/UserBar.jsx';
 import Toast from './components/Toast.jsx';
+import Chatbot from './components/Chatbot.jsx';
 import AuthPage from './pages/AuthPage.jsx';
 import LandingPage from './pages/LandingPage.jsx';
 import ScannerPage from './pages/ScannerPage.jsx';
@@ -33,6 +34,7 @@ export default function App() {
           <ProtectedRoute>
             <Navbar />
             <ScannerPage />
+            <Chatbot />
             <UserBar />
           </ProtectedRoute>
         } />
@@ -40,6 +42,7 @@ export default function App() {
           <ProtectedRoute>
             <Navbar />
             <DashboardPage />
+            <Chatbot />
             <UserBar />
           </ProtectedRoute>
         } />
