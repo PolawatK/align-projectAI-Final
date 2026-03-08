@@ -9,6 +9,7 @@ import aiRouter from './routes/ai.js';
 import chatRouter from './routes/chat.js';
 
 const app = express();
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 4000;
 
 // ─── CORS ────────────────────────────────────────────────────

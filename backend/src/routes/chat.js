@@ -81,7 +81,7 @@ router.post('/', requireAuth, async (req, res) => {
     const ai = getGenAI();
 
     const result = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
+      model: 'gemini-1.5-flash-001',
       contents: contents
     });
 

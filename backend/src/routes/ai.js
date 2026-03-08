@@ -66,7 +66,7 @@ IMPORTANT: Respond ONLY with valid JSON, no markdown, no code blocks, no extra t
   try {
     const ai = getGenAI();
     const result = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
+      model: 'gemini-1.5-flash-001',
       contents: prompt,
       config: {
         temperature: 0.4,
