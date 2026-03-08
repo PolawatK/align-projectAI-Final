@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from "@google/genai";
 import { requireAuth } from '../middleware/auth.js';
 
 const router = Router();
@@ -8,7 +8,7 @@ const router = Router();
 let genAI = null;
 function getGenAI() {
   if (!process.env.GEMINI_API_KEY) throw new Error('GEMINI_API_KEY not configured');
-  if (!genAI) genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  if (!genAI) genAI = new GoogleGenAI(process.env.GEMINI_API_KEY);
   return genAI;
 }
 
@@ -64,12 +64,15 @@ IMPORTANT: Respond ONLY with valid JSON, no markdown, no code blocks, no extra t
 }`;
 
   try {
-    const model = getGenAI().getGenerativeModel({ model: 'gemini-1.5-flash' });
-    const result = await model.generateContent({
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.4, maxOutputTokens: 1000 }
+    const ai = getGenAI();
+    const result = await ai.models.generateContent({
+      model: "gemini-1.5-flash",
+      contents: prompt,
+      config: {
+        temperature: 0.4,
+        maxOutputTokens: 400
+      }
     });
-
     const text = result.response.text().replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(text);
 

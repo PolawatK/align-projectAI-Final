@@ -9,6 +9,7 @@
     "dev": "nodemon src/index.js"
   },
   "dependencies": {
+    "@google/genai": "^1.44.0",
     "@google/generative-ai": "^0.21.0",
     "@supabase/supabase-js": "^2.49.1",
     "cors": "^2.8.5",
