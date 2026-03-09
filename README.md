@@ -40,26 +40,29 @@ cd ../frontend
 npm run dev
 
 ---
-
+```
 # Team Contribution Log
 
-**Member 1**
-- พัฒนา Scanner Page
+**นายพลวัฒน์ กระเทศ 116610905100-1**
+- Prompt จัดทำ MVP เเละ Deploy ระบบบน Vercel & Render
 - เชื่อมต่อ MediaPipe Pose Detection
 - จัดการ logic การตรวจจับ posture
 
-**Member 2**
-- พัฒนา Dashboard UI
-- พัฒนา Authentication UI (Login / Register)
+**นายบารมี มาพรม 11610905120-9**
+- Tester ระบบ
+- ออกแบบ UX/UI
+- ทำ Rag ข้อมูล
 
-**Member 3**
-- พัฒนา Backend API (Express)
-- ออกแบบและสร้าง Database Schema (Supabase)
+**นายปรเมษฐ์ พลซา**
+- จัดทำสไลด์
+- Tester ระบบ
+- ทำ Rag ข้อมูล
 
-**Member 4**
-- พัฒนา AI Recommendation System
-- เชื่อมต่อ Groq API (Llama 3.1)
+**นายพงศภัค เปี่ยมศิริ**
+- จัดทำ Problem Statement
+- Tester ระบบ
+- ทำ Rag ข้อมูล
 
-**Member 5**
-- Deploy ระบบ (Vercel + Render)
-- จัดทำ Documentation และ README
+**นายรันเวย์ ไชย์วร**
+- ทำ Rag ข้อมูล
+- Tester ระบบ
