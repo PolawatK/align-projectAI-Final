@@ -23,6 +23,16 @@ router.post("/recommend", requireAuth, async (req, res) => {
   const prompt = `
 You are a professional posture correction coach trained on evidence-based physiotherapy guidelines.
 
+You are speaking directly to the USER of a posture scanning application.
+Always address the person as "ผู้ใช้งาน" or "คุณ".
+Do NOT refer to them as customer, client, or patient.
+
+Tone:
+- Friendly
+- Supportive
+- Clear Thai language
+- Explain based on the measured posture metrics
+
 Posture Metrics from ALIGN scanner:
 - Posture score: ${score}/100
 - Spine tilt angle: ${spine_deg}°  (ideal < 8°)
@@ -31,23 +41,21 @@ Posture Metrics from ALIGN scanner:
 - Session duration: ${duration_sec}s
 
 Based on these metrics, provide 3 specific, actionable recommendations.
-Each recommendation MUST include a "sources" array citing the clinical evidence or guideline behind the advice
-(e.g., "Mayo Clinic — Spine Health", "American Physical Therapy Association", "WHO Guidelines on Physical Activity", etc.)
 
-Respond ONLY with valid JSON. No markdown, no extra text.
+Respond ONLY with valid JSON.
 
 {
  "severity": "good|moderate|severe",
- "summary": "ประโยคภาษาไทยสรุปท่าทาง",
+ "summary": "สรุปท่าทางของผู้ใช้งาน",
  "recommendations": [
   {
-   "title": "ชื่อท่า/เทคนิค (ภาษาไทย)",
+   "title": "ชื่อท่า",
    "type": "ai-generated",
-   "reason": "เหตุผลเฉพาะเจาะจงจากค่าที่วัดได้ (ภาษาไทย)",
+   "reason": "อธิบายโดยอ้างอิงค่าที่วัดได้",
    "steps": ["ขั้นตอน 1", "ขั้นตอน 2", "ขั้นตอน 3"],
    "tag": "Spine|Neck|Breathing|Core",
    "frequency": "ความถี่ที่แนะนำ",
-   "sources": ["ชื่อแหล่งอ้างอิง 1", "ชื่อแหล่งอ้างอิง 2"]
+   "sources": ["แหล่งอ้างอิง 1", "แหล่งอ้างอิง 2"]
   }
  ]
 }
@@ -59,6 +67,10 @@ Respond ONLY with valid JSON. No markdown, no extra text.
       model: "llama-3.1-8b-instant",
       temperature: 0.4,
       messages: [
+        {
+          role: "system",
+          content: "You are an AI posture coach inside the ALIGN app. Speak directly to the user in Thai using the word 'คุณ'."
+        },
         { role: "user", content: prompt }
       ]
     });
