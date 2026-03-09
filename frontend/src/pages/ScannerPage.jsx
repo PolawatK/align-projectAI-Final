@@ -65,6 +65,8 @@ export default function ScannerPage() {
   const runningRef = useRef(false);
   const counters = useRef({ good:0, bad:0, total:0, streak:0, maxStreak:0, badRow:0, start:0 });
   const lastAngles = useRef({ spine:0, neck:0 });
+  const maxAngles = useRef({ spine:0, neck:0 });
+  const angleSums = useRef({ spine:0, neck:0 });
   const timerInterval = useRef(null);
 
   // ── Camera/Pose init ────────────────────────────────────
@@ -100,6 +102,11 @@ export default function ScannerPage() {
     const sKypho = Math.abs(shX-hX)/Math.hypot(shX-hX,shY-hY);
     const badSpine=sSpine>15, badNeck=sNeck>30, badKypho=sKypho>.25;
     lastAngles.current = {spine: Math.round(sSpine*10)/10, neck: Math.round(sNeck*10)/10};
+    angleSums.current.spine += sSpine;
+    angleSums.current.neck += sNeck;
+
+    maxAngles.current.spine = Math.max(maxAngles.current.spine, sSpine);
+    maxAngles.current.neck = Math.max(maxAngles.current.neck, sNeck);
 
     // Update display metrics (throttle setState)
     setMetrics({
@@ -148,6 +155,11 @@ export default function ScannerPage() {
   async function startScanner() {
     const c=counters.current;
     c.good=0;c.bad=0;c.total=0;c.streak=0;c.maxStreak=0;c.badRow=0;c.start=Date.now();
+    angleSums.current.spine = 0;
+    angleSums.current.neck = 0;
+
+    maxAngles.current.spine = 0;
+    maxAngles.current.neck = 0;
     setThumb(null); setSummary(null); setAiData(null); setPendingSession(null);
 
     if (!poseRef.current) {
@@ -183,10 +195,14 @@ export default function ScannerPage() {
     const c=counters.current;
     const score = c.total>0 ? Math.round((c.good/c.total)*100) : 0;
     const dur = Math.floor((Date.now()-c.start)/1000);
+    const avgSpine = c.total > 0 ? angleSums.current.spine / c.total : 0;
+    const avgNeck = c.total > 0 ? angleSums.current.neck / c.total : 0;
     const sum = {
       score, goodPct:score,
-      spineDeg: lastAngles.current.spine,
-      neckDeg: lastAngles.current.neck,
+      spineDeg: Math.round(avgSpine*10)/10,
+      neckDeg: Math.round(avgNeck*10)/10,
+      maxNeckDeg: Math.round(maxAngles.current.neck*10)/10,
+      maxSpineDeg: Math.round(maxAngles.current.spine*10)/10,
       durationSec: dur, totalFrames: c.total,
       goodSec: Math.floor(c.good/30), badSec: Math.floor(c.bad/30),
       maxStreak: Math.floor(c.maxStreak/30)

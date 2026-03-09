@@ -13,7 +13,8 @@ router.use(requireAuth);
  * Saves a posture session to DB
  */
 router.post('/submit', async (req, res) => {
-  const { score, good_pct, spine_deg, neck_deg, duration_sec, feedback_thumb, ai_recs } = req.body;
+  const { score, good_pct, spine_deg, neck_deg, duration_sec, feedback_thumb, ai_recs ,max_neck_deg,
+  max_spine_deg,} = req.body;
 
   // Validate
   if (score === undefined || duration_sec === undefined) {
@@ -33,6 +34,8 @@ router.post('/submit', async (req, res) => {
       good_pct: Math.round(good_pct || score),
       spine_deg: parseFloat(spine_deg) || 0,
       neck_deg: parseFloat(neck_deg) || 0,
+      max_neck_deg: parseFloat(max_neck_deg) || 0,
+      max_spine_deg: parseFloat(max_spine_deg) || 0,
       duration_sec: Math.round(duration_sec),
       feedback_thumb: feedback_thumb || null,
       ai_recs: ai_recs ? JSON.stringify(ai_recs) : null,
@@ -93,7 +96,7 @@ router.get('/stats', async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('posture_sessions')
-      .select('score, good_pct, feedback_thumb, created_at')
+      .select('score, good_pct, neck_deg, spine_deg, max_neck_deg, max_spine_deg, feedback_thumb, created_at')
       .eq('user_id', req.user.id);
 
     if (error) throw error;
