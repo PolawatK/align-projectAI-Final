@@ -240,6 +240,15 @@ export default function ScannerPage() {
         total_frames: pendingSession.totalFrames
       });
       setAiData(recs);
+
+      // 3. Patch session with ai_recs so Dashboard can display ✓
+      if (saved?.session?.id) {
+        try {
+          await sessionsApi.updateAiRecs(saved.session.id, JSON.stringify(recs));
+        } catch (_) {
+          // non-critical — session already saved
+        }
+      }
     } catch (err) {
       showToast('⚠ ' + err.message);
     } finally {
@@ -449,7 +458,7 @@ function RecommendationPanel({ data, onRate }) {
           <h3 style={{ fontFamily:'Instrument Serif,serif',fontSize:'1.7rem' }}>AI <em style={{color:'var(--brown)'}}>Recommendations</em></h3>
           <div style={{ display:'flex',alignItems:'center',gap:8,padding:'6px 14px',background:'var(--charcoal)',color:'var(--cream)' }}>
             <div style={{width:6,height:6,borderRadius:'50%',background:'var(--sage)',animation:'pulse 1.5s ease-in-out infinite'}}/>
-            <span style={{fontSize:'.7rem',letterSpacing:'.12em',textTransform:'uppercase'}}>Gemini AI</span>
+            <span style={{fontSize:'.7rem',letterSpacing:'.12em',textTransform:'uppercase'}}>Groq AI (Llama 3.1)</span>
           </div>
         </div>
 
@@ -491,8 +500,23 @@ function RecommendationPanel({ data, onRate }) {
                 <span style={{ display:'inline-block',padding:'3px 10px',border:'1px solid var(--accent)',fontSize:'.68rem',letterSpacing:'.1em',textTransform:'uppercase',color:'var(--brown)' }}>{r.tag}</span>
                 {r.frequency && <div style={{fontSize:'.74rem',color:'var(--soft)',marginTop:6}}>⏱ {r.frequency}</div>}
               </div>
+              {/* Sources per card */}
+              {r.sources?.length > 0 && (
+                <div style={{ marginTop:12,paddingTop:10,borderTop:'1px solid var(--warm)' }}>
+                  <div style={{fontSize:'.64rem',letterSpacing:'.1em',textTransform:'uppercase',color:'var(--soft)',marginBottom:4}}>อ้างอิง</div>
+                  {r.sources.map((src,si)=>(
+                    <div key={si} style={{fontSize:'.72rem',color:'var(--sage)',lineHeight:1.5}}>· {src}</div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
+        </div>
+
+        {/* AI Credit footer */}
+        <div style={{ marginTop:16,padding:'10px 14px',background:'rgba(200,168,130,.08)',borderLeft:'2px solid var(--accent)',fontSize:'.74rem',color:'var(--soft)',lineHeight:1.6 }}>
+          🤖 <strong>ที่มาของคำแนะนำ:</strong> สร้างโดย Llama 3.1 ผ่าน Groq จากข้อมูลท่าทางที่วัดได้จริง
+          {data.ai_credit?.note && <span> · {data.ai_credit.note}</span>}
         </div>
 
         {/* HITL Point 2: Feedback on AI */}

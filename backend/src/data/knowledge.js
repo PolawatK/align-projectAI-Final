@@ -4,36 +4,34 @@
  * ไฟล์นี้คือ "สมอง" ของ chatbot
  * แก้ไข / เพิ่มเติมความรู้ได้ที่นี่เลย ไม่ต้องแตะโค้ดอื่น
  *
- * README_RAG.md มีคำแนะนำวิธีปรับ knowledge base นี้
- * ═══════════════════════════════════════════════════════════════
- *
  * โครงสร้างแต่ละ entry:
  * {
  *   id: string           — unique ID (ห้ามซ้ำ)
- *   category: string     — หมวดหมู่ (ใช้กรอง)
+ *   category: string     — หมวดหมู่
  *   tags: string[]       — keywords สำหรับ search
  *   title: string        — ชื่อหัวข้อ
- *   content: string      — เนื้อหาความรู้ (ยิ่งละเอียดยิ่งดี)
+ *   content: string      — เนื้อหา
+ *   source: string       — ชื่อแหล่งที่มา (แสดงต่อผู้ใช้)
+ *   reference: string    — URL หรือ citation เต็ม
  * }
+ * ═══════════════════════════════════════════════════════════════
  */
 
 export const knowledgeBase = [
 
-  // ══════════════════════════════════════════
-  // CATEGORY: office_syndrome
-  // ══════════════════════════════════════════
   {
     id: 'os_001',
     category: 'office_syndrome',
     tags: ['office syndrome', 'ออฟฟิศซินโดรม', 'อาการ', 'สาเหตุ', 'นั่งนาน'],
     title: 'Office Syndrome คืออะไร',
-    content: `Office Syndrome คือกลุ่มอาการที่เกิดจากการทำงานในท่าเดิมซ้ำๆ เป็นเวลานาน โดยเฉพาะการนั่งหน้าคอมพิวเตอร์
-    
+    source: 'Mayo Clinic & กรมการแพทย์ กระทรวงสาธารณสุข',
+    reference: 'https://www.mayoclinic.org/healthy-lifestyle/adult-health/in-depth/office-ergonomics/art-20046169',
+    content: `Office Syndrome คือกลุ่มอาการที่เกิดจากการทำงานในท่าเดิมซ้ำๆ เป็นเวลานาน
+
 สาเหตุหลัก:
 - นั่งในท่าเดิมนานเกิน 2 ชั่วโมงโดยไม่ลุกเดิน
 - จอคอมพิวเตอร์อยู่สูงหรือต่ำเกินไป
 - เก้าอี้ไม่รองรับหลังส่วนล่าง (lumbar support)
-- พิมพ์คีย์บอร์ดในท่าที่ข้อมืองอผิดปกติ
 - ก้มดูโทรศัพท์บ่อยๆ (Text Neck)
 
 อาการที่พบบ่อย:
@@ -41,13 +39,7 @@ export const knowledgeBase = [
 - ปวดหลังส่วนล่าง (Lower Back Pain)
 - ปวดศีรษะจากกล้ามเนื้อคอตึง
 - มือชา นิ้วชา (Carpal Tunnel)
-- ตาล้า ตาแห้ง (Computer Vision Syndrome)
-- ปวดสะโพก ขาชา
-
-กลุ่มเสี่ยง:
-- คนทำงานออฟฟิศที่นั่งนานกว่า 6 ชั่วโมง/วัน
-- นักศึกษาที่นั่งเรียนหรือทำงานนาน
-- ผู้ที่ทำงาน Work From Home โดยไม่มีโต๊ะเก้าอี้ที่เหมาะสม`
+- ตาล้า ตาแห้ง (Computer Vision Syndrome)`,
   },
 
   {
@@ -55,46 +47,42 @@ export const knowledgeBase = [
     category: 'office_syndrome',
     tags: ['ป้องกัน', 'prevention', 'วิธีป้องกัน', 'office syndrome'],
     title: 'วิธีป้องกัน Office Syndrome',
+    source: 'Occupational Safety and Health Administration (OSHA)',
+    reference: 'https://www.osha.gov/ergonomics',
     content: `การป้องกัน Office Syndrome ทำได้โดย:
 
 1. หลัก 20-20-20: ทุก 20 นาที ให้มองจุดห่าง 20 ฟุต นาน 20 วินาที
 2. ลุกขึ้นยืนหรือเดินทุก 30-60 นาที แม้แค่ 2-5 นาที
 3. ตั้งจอคอมพิวเตอร์ให้ระดับสายตาหรือต่ำกว่าเล็กน้อย
 4. ปรับเก้าอี้ให้เท้าแตะพื้น หัวเข่างอ 90 องศา
-5. ใช้ lumbar support หรือม้วนผ้าขนหนูรองหลังส่วนล่าง
-6. วางคีย์บอร์ดให้ข้อศอกงอ 90 องศา ไม่งอข้อมือ
-7. ออกกำลังกาย stretch กล้ามเนื้อคอ บ่า หลัง ทุกวัน`
+5. ออกกำลังกาย stretch กล้ามเนื้อคอ บ่า หลัง ทุกวัน`,
   },
 
-  // ══════════════════════════════════════════
-  // CATEGORY: posture_correction
-  // ══════════════════════════════════════════
   {
     id: 'pc_001',
     category: 'posture_correction',
     tags: ['ท่านั่ง', 'การนั่ง', 'posture', 'ท่าทาง', 'ergonomics'],
     title: 'ท่านั่งที่ถูกต้องสำหรับการทำงาน',
+    source: 'Cleveland Clinic — Ergonomics Guidelines',
+    reference: 'https://my.clevelandclinic.org/health/articles/4485-back-health-and-posture',
     content: `ท่านั่งที่ดีประกอบด้วย:
 
 หัวและคอ:
 - หูอยู่ตรงกับไหล่ ไม่ยื่นไปข้างหน้า
 - สายตามองตรง ไม่ก้มหรือแหงนหัว
-- คางชี้ตรง ไม่ดุ้นขึ้นหรือลง
 
 ไหล่และแขน:
 - ไหล่ผ่อนคลาย ไม่ยกขึ้น ไม่ห่อเข้า
-- ข้อศอกงอ 90 องศา แนบลำตัวพอดี
-- ข้อมือตรง ไม่งอขึ้น-ลง ขณะพิมพ์
+- ข้อศอกงอ 90 องศา
 
 ลำตัวและหลัง:
-- หลังตรง มีความโค้งตามธรรมชาติที่ช่วง lumbar (หลังส่วนล่าง)
-- ไม่ก้มหลัง ไม่แอ่นหลังมากเกินไป
+- หลังตรง มีความโค้งตามธรรมชาติที่ช่วง lumbar
 - สะโพกชิดพนักเก้าอี้ ไม่นั่งขอบ
 
 ขาและเท้า:
 - หัวเข่างอ 90 องศา
-- เท้าวางบนพื้นราบ หรือใช้ที่รองเท้า
-- ไม่ไขว่ห้างนานๆ เพราะทำให้กระดูกเชิงกรานเอียง`
+- เท้าวางบนพื้นราบ
+- ไม่ไขว่ห้างนานๆ`,
   },
 
   {
@@ -102,21 +90,18 @@ export const knowledgeBase = [
     category: 'posture_correction',
     tags: ['หลังค่อม', 'kyphosis', 'หลังโก่ง', 'หลัง', 'แก้', 'ปรับ'],
     title: 'วิธีแก้หลังค่อม (Kyphosis)',
+    source: 'American Physical Therapy Association (APTA)',
+    reference: 'https://www.choosept.com/symptomsconditionsdetail/physical-therapy-guide-to-kyphosis',
     content: `หลังค่อม (Kyphosis) คือการโค้งของกระดูกสันหลังส่วนบนมากผิดปกติ
-
-สาเหตุ:
-- นั่งก้มหน้าคอมพิวเตอร์นานๆ
-- กล้ามเนื้อหน้าอกและไหล่ตึง ดึงไหล่ห่อเข้า
-- กล้ามเนื้อหลังส่วนกลาง (rhomboids, lower trapezius) อ่อนแอ
 
 วิธีแก้ไข:
 1. Shoulder Blade Squeeze: บีบสะบักเข้าหากัน ค้าง 5 วินาที 15 ครั้ง
 2. Chest Stretch: ยืนในกรอบประตู ยืดหน้าอก ค้าง 30 วินาที
 3. Thoracic Extension: นั่งพิงเก้าอี้ เอนหลังโค้งไปด้านหลังเล็กน้อย
 4. Wall Angel: แนบหลังกับผนัง ขยับแขนขึ้นลงแบบทูตสวรรค์
-5. Face Pull ด้วย resistance band ดึงไปทางหู
+5. Face Pull ด้วย resistance band
 
-ระยะเวลา: ทำสม่ำเสมอทุกวัน 3-6 เดือน จึงจะเห็นผลชัดเจน`
+ระยะเวลา: ทำสม่ำเสมอทุกวัน 3-6 เดือน จึงจะเห็นผลชัดเจน`,
   },
 
   {
@@ -124,52 +109,36 @@ export const knowledgeBase = [
     category: 'posture_correction',
     tags: ['คอยื่น', 'text neck', 'forward head', 'คอ', 'ปวดคอ', 'หัวยื่น'],
     title: 'แก้คอยื่น / Forward Head Posture',
-    content: `Forward Head Posture คือศีรษะยื่นไปข้างหน้ากว่าแนวไหล่ 
+    source: 'Spine-health.com & Hansraj KK (2014) — Surgical Technology International',
+    reference: 'https://pubmed.ncbi.nlm.nih.gov/25393825/',
+    content: `Forward Head Posture คือศีรษะยื่นไปข้างหน้ากว่าแนวไหล่
 
-ผลกระทบ: ศีรษะหนัก 5 กก. แต่ทุกๆ 2.5 ซม. ที่ยื่นออก จะเพิ่มน้ำหนักให้คอรับถึง 4.5 กก.!
+ผลกระทบ: ทุกๆ 2.5 ซม. ที่ยื่นออก จะเพิ่มน้ำหนักให้คอรับถึง 4.5 กก. (Hansraj, 2014)
 
 วิธีแก้:
-1. Chin Tuck (สำคัญที่สุด): ดึงคางตรงกลับ ไม่ก้มหัว ค้าง 5 วินาที ทำ 10 ครั้ง ทุก 1 ชั่วโมง
-2. Cervical Retraction: นั่งตัวตรง ดึงหัวกลับตรงๆ เหมือนทำ double chin
+1. Chin Tuck: ดึงคางตรงกลับ ค้าง 5 วินาที ทำ 10 ครั้ง ทุก 1 ชั่วโมง
+2. Cervical Retraction: ดึงหัวกลับตรงๆ เหมือนทำ double chin
 3. Suboccipital stretch: ก้มคางลงเล็กน้อย มือกดท้ายทอยเบาๆ ยืด 30 วินาที
-4. Levator Scapulae stretch: เอียงหัวให้หูแตะไหล่ มือกดศีรษะเบาๆ
-
-ปรับสภาพแวดล้อม:
-- วางโทรศัพท์ให้ระดับสายตา ไม่ก้มดู
-- จอคอมพิวเตอร์ให้ขอบบนอยู่ระดับสายตา
-- ใช้หูฟังแทนการหนีบโทรศัพท์ไว้กับไหล่`
+4. Levator Scapulae stretch: เอียงหัวให้หูแตะไหล่ มือกดศีรษะเบาๆ`,
   },
 
-  // ══════════════════════════════════════════
-  // CATEGORY: exercises
-  // ══════════════════════════════════════════
   {
     id: 'ex_001',
     category: 'exercises',
     tags: ['ออกกำลังกาย', 'ยืดกล้ามเนื้อ', 'stretch', 'exercise', 'ท่าบริหาร', 'คอ', 'บ่า'],
     title: 'ท่าบริหารคอและบ่า (Office Stretch)',
+    source: 'Mayo Clinic — Neck Exercises',
+    reference: 'https://www.mayoclinic.org/diseases-conditions/neck-pain/in-depth/neck-pain/art-20048279',
     content: `ท่าบริหารที่ทำได้ที่โต๊ะทำงาน ใช้เวลา 5-10 นาที:
 
-1. Neck Rotation (หมุนคอ)
-   - ค่อยๆ หมุนหัวไปซ้าย-ขวา ค้างละ 10 วินาที 3 รอบ
+1. Neck Rotation: หมุนหัวซ้าย-ขวา ค้างละ 10 วินาที 3 รอบ
+2. Lateral Neck Flexion: เอียงหูแตะไหล่ ค้างละ 15 วินาที 3 รอบ
+3. Shoulder Rolls: หมุนไหล่ไปข้างหน้า-หลัง 10 ครั้ง
+4. Upper Trapezius Stretch: มือจับขอบเก้าอี้ อีกมือกดศีรษะเบาๆ ค้าง 20 วินาที
+5. Doorway Chest Stretch: ยืนในกรอบประตู ยืดหน้าอก 30 วินาที
+6. Thoracic Rotation: บิดลำตัวซ้าย-ขวา 10 ครั้ง
 
-2. Lateral Neck Flexion (เอียงคอ)
-   - เอียงหูแตะไหล่ซ้าย-ขวา ค้างละ 15 วินาที 3 รอบ
-   - ห้ามยกไหล่ขึ้น
-
-3. Shoulder Rolls (หมุนไหล่)
-   - หมุนไหล่ไปข้างหน้า 10 ครั้ง แล้วย้อนกลับ 10 ครั้ง
-   
-4. Upper Trapezius Stretch
-   - มือหนึ่งจับขอบเก้าอี้ อีกมือกดศีรษะเบาๆ ค้าง 20 วินาที
-
-5. Doorway Chest Stretch
-   - ยืนในกรอบประตู แขนงอ 90 องศา ก้าวเท้าไปข้างหน้า ยืด 30 วินาที
-
-6. Thoracic Rotation (บิดลำตัว)
-   - นั่งตัวตรง ประสานมือไว้หลังศีรษะ บิดลำตัวซ้าย-ขวา 10 ครั้ง
-
-ทำทุก 1-2 ชั่วโมง หรือเมื่อรู้สึกตึง`
+ทำทุก 1-2 ชั่วโมง`,
   },
 
   {
@@ -177,26 +146,17 @@ export const knowledgeBase = [
     category: 'exercises',
     tags: ['core', 'กล้ามเนื้อแกนกลาง', 'หลัง', 'เสริมความแข็งแรง', 'strengthen', 'plank'],
     title: 'เสริมความแข็งแรง Core เพื่อรองรับกระดูกสันหลัง',
-    content: `Core คือกล้ามเนื้อแกนกลางลำตัว ได้แก่ หน้าท้อง หลัง สะโพก ซึ่งช่วยรองรับกระดูกสันหลัง
+    source: 'Harvard Health Publishing',
+    reference: 'https://www.health.harvard.edu/staying-healthy/the-real-world-benefits-of-strengthening-your-core',
+    content: `Core คือกล้ามเนื้อแกนกลางลำตัว ได้แก่ หน้าท้อง หลัง สะโพก
 
-ท่าพื้นฐานสำหรับ Office Syndrome:
+ท่าพื้นฐาน:
+1. Dead Bug: นอนหงาย แขน-ขายกขึ้น ค่อยๆ ลดแขนซ้าย-ขาขวาลง 3x10
+2. Bird Dog: คุกเข่า ยกแขนซ้าย-ขาขวาพร้อมกัน ค้าง 3 วินาที 3x10
+3. Plank: ค้าง 20-60 วินาที 3 เซ็ต
+4. Glute Bridge: นอนหงาย ยกสะโพก ค้าง 2 วินาที 3x15
 
-1. Dead Bug (ง่าย-ปลอดภัย)
-   - นอนหงาย แขน-ขายกขึ้น ค่อยๆ ลดแขนซ้าย-ขาขวาลงพร้อมกัน
-   - ทำ 3 เซ็ต เซ็ตละ 10 ครั้ง
-
-2. Bird Dog
-   - คุกเข่า ยกแขนซ้าย-ขาขวาพร้อมกัน ค้าง 3 วินาที
-   - ทำ 3 เซ็ต เซ็ตละ 10 ครั้ง
-
-3. Plank
-   - ค้างท่า 20-60 วินาที หลังตรง ไม่แอ่น ทำ 3 เซ็ต
-
-4. Glute Bridge
-   - นอนหงาย งอเข่า ยกสะโพกขึ้น ค้าง 2 วินาที
-   - ทำ 3 เซ็ต เซ็ตละ 15 ครั้ง
-
-ทำ 3-4 ครั้ง/สัปดาห์ จะเห็นผลใน 4-6 สัปดาห์`
+ทำ 3-4 ครั้ง/สัปดาห์ เห็นผลใน 4-6 สัปดาห์`,
   },
 
   {
@@ -204,243 +164,184 @@ export const knowledgeBase = [
     category: 'exercises',
     tags: ['breathing', 'หายใจ', 'diaphragm', 'ผ่อนคลาย', 'stress', 'box breathing'],
     title: 'เทคนิคการหายใจเพื่อลดความตึงเครียดกล้ามเนื้อ',
+    source: 'Cleveland Clinic — Diaphragmatic Breathing',
+    reference: 'https://my.clevelandclinic.org/health/articles/9445-diaphragmatic-breathing',
     content: `การหายใจลึกด้วย Diaphragm ช่วยลดความตึงเครียดของกล้ามเนื้อคอและบ่า
 
 Diaphragmatic Breathing:
-1. นั่งหรือนอนสบาย วางมือบนท้อง
-2. หายใจเข้าลึกๆ ให้ท้องพองขึ้น ไม่ใช่อก
-3. หายใจออกช้าๆ ท้องยุบลง
-4. ทำ 5-10 ครั้ง
+- หายใจเข้าลึกๆ ให้ท้องพองขึ้น (ไม่ใช่อก) ทำ 5-10 ครั้ง
 
 Box Breathing (4-4-4-4):
-- หายใจเข้า 4 วินาที → กลั้น 4 วินาที → หายใจออก 4 วินาที → กลั้น 4 วินาที
-- ทำ 4 รอบ ใช้เวลาแค่ 1 นาที
+- หายใจเข้า 4 วินาที → กลั้น 4 → ออก 4 → กลั้น 4
+- ใช้โดย US Navy SEALs ในการลดความเครียดเฉียบพลัน
 
-4-7-8 Breathing (ผ่อนคลายก่อนนอน):
-- หายใจเข้า 4 วินาที → กลั้น 7 วินาที → หายใจออก 8 วินาที
-- ทำ 4 รอบ
-
-ทำทุกชั่วโมง หรือเมื่อรู้สึกเครียด คอตึง`
+4-7-8 Breathing (ก่อนนอน):
+- หายใจเข้า 4 วินาที → กลั้น 7 → ออก 8 ทำ 4 รอบ`,
   },
 
-  // ══════════════════════════════════════════
-  // CATEGORY: ergonomics
-  // ══════════════════════════════════════════
   {
     id: 'erg_001',
     category: 'ergonomics',
-    tags: ['ergonomics', 'จอคอม', 'โต๊ะ', 'เก้าอี้', 'จัดโต๊ะ', 'workspace', 'ที่ทำงาน'],
+    tags: ['ergonomics', 'จอคอม', 'โต๊ะ', 'เก้าอี้', 'จัดโต๊ะ', 'workspace'],
     title: 'การจัดโต๊ะทำงาน Ergonomics ที่ถูกต้อง',
+    source: 'OSHA — Computer Workstations eTool',
+    reference: 'https://www.osha.gov/etools/computer-workstations',
     content: `การจัดโต๊ะที่ดีลด Office Syndrome ได้ถึง 60%
 
 จอคอมพิวเตอร์:
-- ระยะห่าง: 50-70 ซม. จากดวงตา (ประมาณหนึ่งช่วงแขน)
-- ความสูง: ขอบบนของจออยู่ระดับสายตาหรือต่ำกว่าเล็กน้อย
+- ระยะห่าง: 50-70 ซม. (ประมาณหนึ่งช่วงแขน)
+- ความสูง: ขอบบนอยู่ระดับสายตา
 - มุม: เอียงจอออก 10-20 องศา
-- ถ้าใช้ Laptop ควรใช้ laptop stand + keyboard แยก
 
 เก้าอี้:
 - ความสูง: เท้าแตะพื้น หัวเข่างอ 90 องศา
-- ความลึก: นั่งให้หลังชิดพนัก ยังเหลือช่องว่างด้านหลังหัวเข่า 2-3 นิ้ว
-- Lumbar Support: รองรับหลังส่วนล่าง (ช่วง L3-L5)
-- Armrest: ปรับให้ข้อศอกงอ 90 องศา ไหล่ไม่ยก
+- Lumbar Support: รองรับหลัง L3-L5
+- Armrest: ข้อศอกงอ 90 องศา ไหล่ไม่ยก
 
-โต๊ะ:
-- ความสูง: ข้อศอกงอ 90 องศา ขณะวางมือบนโต๊ะ
-- Standing Desk: สลับนั่ง-ยืนทุก 30-60 นาที
-
-แสง:
-- ไม่ให้แสงส่องตรงหน้าจอ ทำให้แสบตา
-- ใช้แสงธรรมชาติจากด้านข้าง ไม่ใช่จากด้านหลัง`
+Standing Desk: สลับนั่ง-ยืนทุก 30-60 นาที`,
   },
 
   {
     id: 'erg_002',
     category: 'ergonomics',
-    tags: ['laptop', 'แล็ปท็อป', 'notebook', 'การใช้แล็ปท็อป', 'นั่งทำงาน'],
+    tags: ['laptop', 'แล็ปท็อป', 'notebook', 'การใช้แล็ปท็อป'],
     title: 'วิธีใช้ Laptop อย่างถูกต้อง',
-    content: `Laptop เป็นตัวการหลักของ Office Syndrome เพราะออกแบบมาเพื่อความพกพา ไม่ใช่ ergonomics
+    source: 'Cornell University Ergonomics Web (CUErgo)',
+    reference: 'http://ergo.human.cornell.edu/culaptoptips.html',
+    content: `Laptop ออกแบบมาเพื่อความพกพา ไม่ใช่ ergonomics — จอต่ำเกินไปทำให้ก้มคอ
 
-ปัญหาของ Laptop:
-- จอต่ำเกินไป ทำให้ก้มคอ
-- คีย์บอร์ดและจออยู่ตำแหน่งเดียวกัน แก้ไขทั้งสองพร้อมกันไม่ได้
+วิธีแก้:
+1. ใช้ Laptop Stand ยกจอให้ระดับสายตา (200-500 บาท)
+2. ใช้ External Keyboard + Mouse (300-1,300 บาท)
+3. ถ้าไม่มีอุปกรณ์: ใช้กล่องหนังสือรองแทนได้
 
-วิธีแก้ราคาประหยัด:
-1. ใช้กล่องหนังสือ/ที่วาง Laptop ยกจอให้สูงขึ้น
-2. ใช้คีย์บอร์ดและเมาส์ภายนอก
-3. ถ้าไม่มีอุปกรณ์เสริม: นั่งให้หลังตรง ยกจอขึ้น แต่ยอมให้แขนอยู่ต่ำหน่อย
-
-อุปกรณ์แนะนำ (คุ้มค่า):
-- Laptop Stand: 200-500 บาท ลดปวดคอได้ทันที
-- External Keyboard: 300-800 บาท
-- Wireless Mouse: 200-500 บาท
-- Monitor Arm: สำหรับจอภายนอก ปรับได้ยืดหยุ่น`
+อุปกรณ์เสริมที่แนะนำ: Laptop Stand, External Keyboard, Wireless Mouse, Monitor Arm`,
   },
 
-  // ══════════════════════════════════════════
-  // CATEGORY: pain_relief
-  // ══════════════════════════════════════════
   {
     id: 'pr_001',
     category: 'pain_relief',
     tags: ['ปวดหลัง', 'lower back pain', 'หลังส่วนล่าง', 'ปวด', 'แก้ปวด'],
     title: 'รับมือกับปวดหลังส่วนล่าง (Lower Back Pain)',
+    source: 'National Institute of Neurological Disorders and Stroke (NINDS)',
+    reference: 'https://www.ninds.nih.gov/health-information/patient-caregiver-education/fact-sheets/low-back-pain-fact-sheet',
     content: `ปวดหลังส่วนล่างเป็นอาการที่พบมากที่สุดใน Office Syndrome
-
-สาเหตุหลัก:
-- นั่งนานโดยไม่มี Lumbar Support
-- กล้ามเนื้อ Hip Flexor ตึง (จากนั่งงอสะโพกนานๆ)
-- Core อ่อนแอ ไม่รองรับกระดูกสันหลัง
 
 บรรเทาทันที:
 1. ลุกขึ้นยืน เดิน 5 นาที
-2. Cat-Cow Stretch: คุกเข่า โค้งหลังขึ้น-ลง ช้าๆ 10 ครั้ง
+2. Cat-Cow Stretch: คุกเข่า โค้งหลังขึ้น-ลง 10 ครั้ง
 3. Child's Pose: คุกเข่า ก้มลงเหยียดแขนไปข้างหน้า ค้าง 30 วินาที
 4. Knee to Chest: นอนหงาย ดึงเข่าเข้าหาอก ค้าง 20 วินาที
-5. ประคบร้อนบริเวณที่ปวด 15-20 นาที
+5. ประคบร้อน 15-20 นาที
 
-ท่าป้องกัน Hip Flexor stretch:
-- ท่า Lunge: ก้าวขาไปข้างหน้า ย่อลงให้หัวเข่าหลังเกือบแตะพื้น
-- ค้าง 30 วินาที สลับขา ทำทุกวัน
-
-⚠️ ควรพบแพทย์เมื่อ: ปวดรุนแรง ปวดร้าวลงขา มีอาการชาที่ขา`
+⚠️ ควรพบแพทย์เมื่อ: ปวดรุนแรง ปวดร้าวลงขา มีอาการชา`,
   },
 
   {
     id: 'pr_002',
     category: 'pain_relief',
-    tags: ['ปวดคอ', 'neck pain', 'ปวดบ่า', 'ไหล่', 'muscle tension', 'กล้ามเนื้อตึง'],
+    tags: ['ปวดคอ', 'neck pain', 'ปวดบ่า', 'ไหล่', 'muscle tension'],
     title: 'บรรเทาปวดคอและบ่า',
-    content: `อาการปวดคอ-บ่า มักมาจากกล้ามเนื้อ Upper Trapezius และ Levator Scapulae ที่ทำงานหนักเกินไป
+    source: 'Mayo Clinic — Neck Pain',
+    reference: 'https://www.mayoclinic.org/diseases-conditions/neck-pain/diagnosis-treatment/drc-20375587',
+    content: `อาการปวดคอ-บ่า มักมาจาก Upper Trapezius และ Levator Scapulae ทำงานหนักเกินไป
 
 บรรเทาเร่งด่วน:
-1. ใช้นิ้วโป้งกดจุดนูนบนบ่า (trigger point) ค้าง 10-15 วินาที
+1. กดจุด trigger point บนบ่า ค้าง 10-15 วินาที
 2. ประคบร้อน 15-20 นาที
-3. Neck Rotation: หมุนหัวช้าๆ เต็มองศา 5 รอบ
-4. ไม่ยกไหล่ขณะทำงาน (stress habit ที่หลายคนทำโดยไม่รู้ตัว)
+3. Neck Rotation ช้าๆ 5 รอบ
 
-ยืดคลายกล้ามเนื้อ:
-1. Upper Trapezius: เอียงหัวให้หูแตะไหล่ มืออีกข้างดึงลงเบาๆ ค้าง 20 วินาที
-2. Levator Scapulae: หันหัวไป 45 องศา ก้มคางลง มือช่วยกด ค้าง 20 วินาที
-3. Pec Minor: ยืนชิดมุมห้อง กางแขนกดผนัง ก้าวเท้าไปข้างหน้า
+ยืดคลาย:
+1. Upper Trapezius Stretch: เอียงหัวให้หูแตะไหล่ ค้าง 20 วินาที
+2. Levator Scapulae: หันหัว 45 องศา ก้มคาง ค้าง 20 วินาที
 
-Self-massage:
-- ใช้ลูกเทนนิสกลิ้งบริเวณบ่า
-- ใช้ foam roller คลึงหลังส่วนบน`
+Self-massage: ลูกเทนนิสกลิ้งบ่า / foam roller คลึงหลังบน`,
   },
 
-  // ══════════════════════════════════════════
-  // CATEGORY: lifestyle
-  // ══════════════════════════════════════════
   {
     id: 'ls_001',
     category: 'lifestyle',
-    tags: ['นอนหลับ', 'sleep', 'ท่านอน', 'หมอน', 'ที่นอน', 'ปวดหลังตอนเช้า'],
+    tags: ['นอนหลับ', 'sleep', 'ท่านอน', 'หมอน', 'ที่นอน'],
     title: 'ท่านอนที่ดีต่อกระดูกสันหลัง',
-    content: `ท่านอนส่งผลต่อสุขภาพกระดูกสันหลังโดยตรง นอน 7-9 ชั่วโมงต่อคืน
+    source: 'Sleep Foundation & Mayo Clinic',
+    reference: 'https://www.sleepfoundation.org/sleeping-positions',
+    content: `ท่านอนส่งผลต่อสุขภาพกระดูกสันหลัง — ควรนอน 7-9 ชั่วโมง/คืน
 
-ท่านอนและผลกระทบ:
-1. นอนตะแคง (ดีที่สุด):
-   - ใช้หมอนที่รองรับคอให้ตรงกับไหล่
-   - หนุนหมอนระหว่างหัวเข่าลดแรงกดที่สะโพก
-   - โค้งขาเล็กน้อย ไม่งอมากเกิน
+1. นอนตะแคง (ดีที่สุด): หนุนหมอนระหว่างหัวเข่า
+2. นอนหงาย: หนุนหมอนใต้เข่าลดแรงกดหลัง
+3. นอนคว่ำ (ไม่แนะนำ): บิดคอทั้งคืน ทำลายกระดูกต้นคอ
 
-2. นอนหงาย (ดีรองลงมา):
-   - หมอนบางพอดี ไม่ยกหัวสูงเกิน
-   - หนุนหมอนใต้เข่าลดแรงกดหลังส่วนล่าง
-
-3. นอนคว่ำ (ไม่แนะนำ):
-   - บิดคอทั้งคืน ทำลายกระดูกต้นคอ
-   - ถ้าเลิกไม่ได้: หนุนหมอนบางๆ ใต้ท้อง
-
-หมอน:
-- ควรเลือกหมอนที่รองรับช่องว่างระหว่างคอกับที่นอน
-- หมอนที่แข็งเกินหรืออ่อนเกินล้วนไม่ดี
-- เปลี่ยนหมอนทุก 1-2 ปี`
+หมอน: เลือกที่รองรับช่องว่างระหว่างคอกับที่นอน เปลี่ยนทุก 1-2 ปี`,
   },
 
   {
     id: 'ls_002',
     category: 'lifestyle',
-    tags: ['สมาร์ทโฟน', 'โทรศัพท์', 'text neck', 'phone', 'การใช้โทรศัพท์', 'ก้มหน้าจอ'],
+    tags: ['สมาร์ทโฟน', 'โทรศัพท์', 'text neck', 'phone', 'ก้มหน้าจอ'],
     title: 'ลด Text Neck จากการใช้สมาร์ทโฟน',
-    content: `Text Neck คืออาการปวดคอจากการก้มดูโทรศัพท์ โดยเฉลี่ยคนไทยก้มหน้าจอ 4-5 ชั่วโมง/วัน
+    source: 'Hansraj KK (2014) — Surgical Technology International',
+    reference: 'https://pubmed.ncbi.nlm.nih.gov/25393825/',
+    content: `Text Neck คืออาการปวดคอจากการก้มดูโทรศัพท์
 
-ผลกระทบ:
-- ก้ม 15 องศา = รับน้ำหนัก 12 กก. บนคอ
-- ก้ม 45 องศา = รับน้ำหนัก 22 กก. บนคอ
-- ก้ม 60 องศา = รับน้ำหนัก 27 กก. บนคอ
+ผลกระทบตามงานวิจัย Hansraj (2014):
+- ก้ม 15° = รับน้ำหนัก 12 กก. บนคอ
+- ก้ม 45° = รับน้ำหนัก 22 กก. บนคอ
+- ก้ม 60° = รับน้ำหนัก 27 กก. บนคอ
 
-วิธีลดผลกระทบ:
-1. ยกโทรศัพท์ขึ้นให้ระดับสายตา แทนการก้มหัวลง
-2. ใช้ทั้งสองมือรับน้ำหนักโทรศัพท์สลับกัน
-3. ตั้งเวลาเตือนทุก 20-30 นาที ให้พักสายตาและยืดคอ
-4. ปิดแจ้งเตือนที่ไม่จำเป็น ลดความถี่การหยิบโทรศัพท์
-5. ใช้ Kindle/tablet บน stand แทนการถือ`
+วิธีลด:
+1. ยกโทรศัพท์ให้ระดับสายตา
+2. ตั้งเวลาเตือนทุก 20-30 นาที ให้ยืดคอ
+3. ปิดแจ้งเตือนที่ไม่จำเป็น`,
   },
 
-  // ══════════════════════════════════════════
-  // CATEGORY: when_to_see_doctor
-  // ══════════════════════════════════════════
   {
     id: 'dr_001',
     category: 'when_to_see_doctor',
-    tags: ['พบแพทย์', 'หมอ', 'อันตราย', 'ต้องระวัง', 'red flag', 'นักกายภาพ'],
+    tags: ['พบแพทย์', 'หมอ', 'อันตราย', 'red flag', 'นักกายภาพ'],
     title: 'เมื่อไหร่ควรพบแพทย์หรือนักกายภาพบำบัด',
-    content: `อาการที่ต้องพบแพทย์ทันที (Red Flags):
+    source: 'American Physical Therapy Association (APTA)',
+    reference: 'https://www.choosept.com/guide/physical-therapy-guide-neck-pain',
+    content: `Red Flags — ต้องพบแพทย์ทันที:
 - ปวดรุนแรงมาก รบกวนการนอนหลับ
-- ปวดร้าวลงขาหรือแขน โดยเฉพาะถ้ามีชาหรืออ่อนแรงร่วมด้วย
+- ปวดร้าวลงขา/แขน มีอาการชาหรืออ่อนแรง
 - ปัสสาวะ/อุจจาระผิดปกติ (ฉุกเฉินมาก)
-- หกล้ม/อุบัติเหตุก่อนปวด
 - ปวดไม่ดีขึ้นหลังพัก หรือแย่ลงทุกวัน
 
 ควรพบนักกายภาพบำบัด:
 - ปวดนาน 2-3 สัปดาห์ขึ้นไป ไม่ดีขึ้น
-- ทำ stretch เองแล้วไม่ได้ผล
-- ต้องการโปรแกรม exercise ที่เหมาะกับตัวเอง
 - Posture score ต่ำต่อเนื่อง ต้องการ professional guidance
 
-ผู้เชี่ยวชาญที่เกี่ยวข้อง:
-- นักกายภาพบำบัด (Physiotherapist): ท่าบริหาร, manual therapy
-- แพทย์ออร์โธปิดิกส์: กระดูก, หมอนรองกระดูก
-- แพทย์เวชศาสตร์ฟื้นฟู: ฟื้นฟูสมรรถภาพ`
+ผู้เชี่ยวชาญ: นักกายภาพบำบัด, แพทย์ออร์โธปิดิกส์, แพทย์เวชศาสตร์ฟื้นฟู`,
   },
 
 ];
 
 /**
- * ═══════════════════════════════════════════════════════════════
- * Simple keyword-based retrieval
- * Returns top N most relevant entries based on tag/content match
- * ═══════════════════════════════════════════════════════════════
+ * Keyword-based retrieval — returns top N relevant entries
  */
 export function retrieveContext(query, topN = 3) {
   const q = query.toLowerCase();
-  
+
   const scored = knowledgeBase.map(entry => {
     let score = 0;
-    
-    // Tag match (high weight)
+
     entry.tags.forEach(tag => {
       if (q.includes(tag.toLowerCase())) score += 3;
     });
-    
-    // Title match (medium weight)
+
     if (entry.title.toLowerCase().split(' ').some(w => q.includes(w) && w.length > 2)) score += 2;
-    
-    // Category match (low weight)
+
     if (q.includes(entry.category.toLowerCase())) score += 1;
-    
-    // Content keyword match
+
     const contentWords = entry.content.toLowerCase().split(/\s+/);
     const queryWords = q.split(/\s+/).filter(w => w.length > 2);
     queryWords.forEach(qw => {
       if (contentWords.some(cw => cw.includes(qw))) score += 0.5;
     });
-    
+
     return { ...entry, score };
   });
-  
+
   return scored
     .filter(e => e.score > 0)
     .sort((a, b) => b.score - a.score)

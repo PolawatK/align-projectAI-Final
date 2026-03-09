@@ -48,6 +48,9 @@ export const sessionsApi = {
 
   updateFeedback: (id, feedback_thumb) =>
     apiFetch(`/api/sessions/${id}/feedback`, { method: 'PUT', body: JSON.stringify({ feedback_thumb }) }),
+
+  updateAiRecs: (id, ai_recs) =>
+    apiFetch(`/api/sessions/${id}/ai-recs`, { method: 'PATCH', body: JSON.stringify({ ai_recs }) }),
 };
 
 // ── AI ────────────────────────────────────────────────────────

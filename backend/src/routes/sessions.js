@@ -154,6 +154,32 @@ router.put('/:id/feedback', async (req, res) => {
   }
 });
 
+/**
+ * PATCH /api/sessions/:id/ai-recs
+ * Save AI recommendation JSON to an existing session
+ */
+router.patch('/:id/ai-recs', async (req, res) => {
+  const { id } = req.params;
+  const { ai_recs } = req.body;
+
+  if (!ai_recs) {
+    return res.status(400).json({ error: 'ai_recs is required' });
+  }
+
+  try {
+    const { error } = await supabase
+      .from('posture_sessions')
+      .update({ ai_recs: typeof ai_recs === 'string' ? ai_recs : JSON.stringify(ai_recs) })
+      .eq('id', id)
+      .eq('user_id', req.user.id); // Security: only own sessions
+
+    if (error) throw error;
+    res.json({ message: 'ai_recs updated' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update ai_recs' });
+  }
+});
+
 // ── Helper ──────────────────────────────────────────────────
 async function updateProfileStats(userId) {
   try {
