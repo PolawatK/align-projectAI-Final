@@ -13,11 +13,12 @@ app.set("trust proxy", 1);
 const PORT = process.env.PORT || 4000;
 
 // ─── CORS ────────────────────────────────────────────────────
+// ก่อน — อาจเป็นแบบนี้
+// แก้เป็น
 app.use(cors({
   origin: process.env.FRONTEND_URL || '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
 }));
 
 // ─── Body Parser ─────────────────────────────────────────────
