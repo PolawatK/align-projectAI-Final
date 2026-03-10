@@ -266,7 +266,7 @@ export default function LandingPage() {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             {[
-              { icon: '◈', title: 'Gemini AI Recommendations', desc: 'คำแนะนำ 3 ข้อที่ปรับตามมุม Spine และ Neck จริงของคุณ ไม่ใช่ template ทั่วไป', tag: 'AI-Powered' },
+              { icon: '◈', title: 'Groq AI Recommendations', desc: 'คำแนะนำ 3 ข้อที่ปรับตามมุม Spine และ Neck จริงของคุณ ไม่ใช่ template ทั่วไป', tag: 'AI-Powered' },
               { icon: '◎', title: 'Session History & KPI', desc: 'ติดตาม Score, Good Posture Rate และ Streak ของทุก session บน Dashboard', tag: 'Analytics' },
             ].map(({ icon, title, desc, tag }, i) => (
               <RevealBlock key={title} delay={i * 100 + 100}>
